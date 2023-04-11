@@ -2,14 +2,16 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import { TopBar } from 'components/Bar';
 import SideDrawer from 'components/Drawer';
-import Dashboard from './Dashboard';
+import Landing from './Landing';
+
+import './styles.css'
 
 const drawerWidth: number = 240;
 
-
-
 export default function Home() {
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = React.useState(false);
+    const [currentComponent, setCurrentComponent] = React.useState(<Landing />);
+
     const toggleDrawer = () => {
         setOpen(!open);
     };
@@ -17,9 +19,10 @@ export default function Home() {
     return (
         <Box sx={{ display: 'flex' }}>
             <TopBar open={open} toggleDrawer={toggleDrawer} />
-            <SideDrawer open={open} drawerWidth={drawerWidth} toggleDrawer={toggleDrawer} />
-
-            <Dashboard/>
+            <SideDrawer open={open} width={drawerWidth} toggleDrawer={toggleDrawer} setcurrentcomponent={setCurrentComponent} />
+            <div id="display_area">
+                {currentComponent}
+            </div>
         </Box>
     );
 }
