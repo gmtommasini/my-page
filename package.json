@@ -1,7 +1,7 @@
 {
   "name": "my-page",
   "version": "0.1.0",
-  "homepage": "https://gitname.github.io/react-gh-pages",
+  "homepage": "https://gmtommasini.github.io/my-page/",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.6",
