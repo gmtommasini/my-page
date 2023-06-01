@@ -131,7 +131,7 @@ export default function SideDrawer(props: DrawerProps) {
         </ListItemButton>
 
 
-        <ListItemButton onClick={() => handleMenuItemClick(<IFrame url='https://github.com/gmtommasini/my-page'/>)}>
+        <ListItemButton component="a" href='https://github.com/gmtommasini/my-page' target='_blank'>
         {/* <ListItemButton onClick={() => handleMenuItemClick(<IFrame url='https://www.lawrenceparkdental.com/doctor/dr-jose-olavo-queiroz-2-2-2/'/>)}> */}
           <ListItemIcon>
             <GitHubIcon />
