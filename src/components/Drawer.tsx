@@ -22,6 +22,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 // PAGES
 import Landing from 'pages/Landing';
 import QRcode_page from 'pages/QRcodeGen';
+import BCard_page from 'pages/BCard'
 import IFrame from './create_iframe';
 
 import { styled } from '@mui/material/styles';
@@ -111,15 +112,15 @@ export default function SideDrawer(props: DrawerProps) {
 
         <Divider sx={{ my: 1 }} />
 
-        <ListSubheader component="div" inset>
+        <ListSubheader component="div" inset         >
           About me
         </ListSubheader>
 
-        <ListItemButton>
+        <ListItemButton onClick={() => handleMenuItemClick(<BCard_page />)}>
           <ListItemIcon>
             <InfoIcon />
           </ListItemIcon>
-          <ListItemText primary="Resume" />
+          <ListItemText primary="Card" />
         </ListItemButton>
 
         <ListItemButton component="a" href='https://www.linkedin.com/in/gtommasini/' target='_blank'>
