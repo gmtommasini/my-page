@@ -21,8 +21,6 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 // PAGES
 import Landing from 'pages/Landing';
-import QRcode_page from 'pages/QRcodeGen';
-import BCard_page from 'pages/BCard'
 import IFrame from './create_iframe';
 
 import { styled } from '@mui/material/styles';
@@ -96,7 +94,7 @@ export default function SideDrawer(props: DrawerProps) {
           Little Projects
         </ListSubheader>
 
-        <ListItemButton onClick={() => handleMenuItemClick(<QRcode_page />)}>
+        <ListItemButton  onClick={() => handleMenuItemClick(<IFrame url='https://gmtommasini.pythonanywhere.com/qrcode'/>)}>
           <ListItemIcon>
             <QrCode2Icon />
           </ListItemIcon>
@@ -115,8 +113,8 @@ export default function SideDrawer(props: DrawerProps) {
         <ListSubheader component="div" inset         >
           About me
         </ListSubheader>
-
-        <ListItemButton onClick={() => handleMenuItemClick(<BCard_page />)}>
+        
+        <ListItemButton  onClick={() => handleMenuItemClick(<IFrame url='https://gmtommasini.pythonanywhere.com'/>)}>
           <ListItemIcon>
             <InfoIcon />
           </ListItemIcon>
