@@ -14,7 +14,7 @@ interface fProps extends Props {
  * @returns string date YYYY-MM-DD
  */
 export function FormatedDate({ date, separator }: fProps): string {
-  const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "2-digit", day: "numeric" };
+  const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "2-digit", day: "2-digit" };
   let formattedDate = new Intl.DateTimeFormat("en-CA", options).format(date);
   if (separator) {
     formattedDate = formattedDate.replace(/-/g, separator);
@@ -25,6 +25,9 @@ export function FormatedDate({ date, separator }: fProps): string {
 // For the components
 let styles: React.CSSProperties = {
   fontSize: '11px',
+  textAlign: 'right',
+  margin: '10px',
+  marginBottom: '0'
 }
 export const PublishedDate: React.FC<Props> = ({ date }: Props) => {
   const pdate = FormatedDate({date});
