@@ -9,7 +9,7 @@ import './styles.css'
 const drawerWidth: number = 240;
 
 export default function Home() {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(true);
     const [currentComponent, setCurrentComponent] = React.useState(<Landing />);
 
     const toggleDrawer = () => {
