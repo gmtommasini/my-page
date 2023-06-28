@@ -94,7 +94,7 @@ export function TopBar(props: AppBarProps) {
           noWrap
           sx={{ flexGrow: 1 }}
         >
-          My Stuff
+          Gui's paraphernalia
         </Typography>
         {/* <IconButton color="inherit">
           <Badge badgeContent={4} color="secondary">
