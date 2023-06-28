@@ -32,8 +32,7 @@ export default function Dashboard() {
                 display: 'flex',
                 flexDirection: 'column',
                 height: 240,
-              }}
-            >
+              }}>
               {/* <Chart /> */}
             </Paper>
           </Grid>
@@ -54,6 +53,7 @@ export default function Dashboard() {
           <Grid item xs={12}>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
               {/* <Orders /> */}
+              This page is a placeholder for future projects
             </Paper>
           </Grid>
         </Grid>
