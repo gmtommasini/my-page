@@ -20,8 +20,12 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 // PAGES
-import Landing from 'pages/Landing';
-import IFrame from './create_iframe';
+
+// import Landing from 'pages/Landing';
+import Hello from 'pages/Hello';
+import Dashboard from 'pages/Dashboard';
+import Card from 'pages/Card';
+import QRCode from 'pages/QRCode';
 
 import { styled } from '@mui/material/styles';
 // import { mainListItems, secondaryListItems } from 'components/SideBar';
@@ -65,7 +69,7 @@ export default function SideDrawer(props: DrawerProps) {
   }
 
   return (
-    <Drawer variant="permanent" open={props.open} width={props.width} setcurrentcomponent={()=>{}}  >
+    <Drawer variant="permanent" open={props.open} width={props.width} setcurrentcomponent={() => { }}  >
       <Toolbar
         sx={{
           display: 'flex',
@@ -75,12 +79,12 @@ export default function SideDrawer(props: DrawerProps) {
         }}
       >
         {/* <List component="nav"> */}
-          <ListItemButton onClick={() => handleMenuItemClick(<Landing />)}>
-            <ListItemIcon>
-              <HomeIcon />
-            </ListItemIcon>
-            <ListItemText primary="Home" />
-          </ListItemButton>
+        <ListItemButton onClick={() => handleMenuItemClick(<Hello />)}>
+          <ListItemIcon>
+            <HomeIcon />
+          </ListItemIcon>
+          <ListItemText primary="Home" />
+        </ListItemButton>
         {/* </List> */}
         <IconButton onClick={props.toggleDrawer}>
           <ChevronLeftIcon />
@@ -94,27 +98,27 @@ export default function SideDrawer(props: DrawerProps) {
           Little Projects
         </ListSubheader>
 
-        <ListItemButton  onClick={() => handleMenuItemClick(<IFrame url='https://gmtommasini.pythonanywhere.com/qrcode'/>)}>
+        <ListItemButton onClick={() => handleMenuItemClick(<QRCode />)}>
           <ListItemIcon>
             <QrCode2Icon />
           </ListItemIcon>
           <ListItemText primary="QRCode Gen." />
         </ListItemButton>
 
-        <ListItemButton>
+        <ListItemButton onClick={() => handleMenuItemClick(<Dashboard />)}>
           <ListItemIcon>
             <PeopleIcon />
           </ListItemIcon>
-          <ListItemText primary="TBD" />
+          <ListItemText primary="Dummy Placeholder" />
         </ListItemButton>
 
         <Divider sx={{ my: 1 }} />
 
-        <ListSubheader component="div" inset         >
+        <ListSubheader component="div" inset>
           About me
         </ListSubheader>
-        
-        <ListItemButton  onClick={() => handleMenuItemClick(<IFrame url='https://gmtommasini.pythonanywhere.com'/>)}>
+
+        <ListItemButton onClick={() => handleMenuItemClick(<Card/>)}>
           <ListItemIcon>
             <InfoIcon />
           </ListItemIcon>
@@ -128,9 +132,7 @@ export default function SideDrawer(props: DrawerProps) {
           <ListItemText primary="LinkedIn" />
         </ListItemButton>
 
-
         <ListItemButton component="a" href='https://github.com/gmtommasini/my-page' target='_blank'>
-        {/* <ListItemButton onClick={() => handleMenuItemClick(<IFrame url='https://www.lawrenceparkdental.com/doctor/dr-jose-olavo-queiroz-2-2-2/'/>)}> */}
           <ListItemIcon>
             <GitHubIcon />
           </ListItemIcon>

@@ -1,25 +1,22 @@
-// import * as React from 'react';
-import { PublishedDate } from 'utils/Dates';
+import React, { useState, useEffect } from 'react';
 
+import Hello from './Hello';
+import Card from './Card';
 
 export default function Landing() {
-
+    const [redirectToDashboard, setRedirectToDashboard] = useState(false);
+    useEffect(() => {
+        const timer = setTimeout(() => {
+          setRedirectToDashboard(true);
+        }, 5000);
+    
+        // Clear the timer when the component is unmounted or the state changes
+        return () => clearTimeout(timer);
+      }, []);
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column', minHeight: 'calc(100vh - 80px)', justifyContent: 'space-between' }}>
-            <div>
-                <h1>Landing page</h1>
-
-                This is a page I created to study a bit of React and also expose my little backend projects.
-                <br />
-                It is a continuous work and I'll try to keep updating and including more little projects.
-                
-            </div>
-
-            {/* For now I am updating this date manually */}
-            <PublishedDate date={new Date("2023-6-2")} />
-
-        </div>
+        // <Hello/>
+        redirectToDashboard ? <Card/> : <Hello/>
     );
 }
 
