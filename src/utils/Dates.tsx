@@ -40,3 +40,13 @@ export const UpdateDate: React.FC<Props> = (props) => {
 };
 
 
+export function generateRandomDate(minDate : Date = new Date(0,0,0)) : Date {
+  function getRandomInt(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  const today = new Date()
+  let year = getRandomInt(minDate.getFullYear(), today.getFullYear())
+  let month = getRandomInt(minDate.getMonth(), today.getMonth())
+  let day = getRandomInt(minDate.getDay(), today.getDay())
+  return new Date(year, month, day) 
+}
