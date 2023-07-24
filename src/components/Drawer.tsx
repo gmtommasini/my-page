@@ -28,6 +28,7 @@ import Card from 'pages/Card';
 import QRCode from 'pages/QRCode';
 
 import { styled } from '@mui/material/styles';
+import MusicPage from 'pages/Music';
 // import { mainListItems, secondaryListItems } from 'components/SideBar';
 
 interface DrawerProps {
@@ -103,6 +104,13 @@ export default function SideDrawer(props: DrawerProps) {
             <QrCode2Icon />
           </ListItemIcon>
           <ListItemText primary="QRCode Gen." />
+        </ListItemButton>
+
+        <ListItemButton onClick={() => handleMenuItemClick(<MusicPage />)}>
+          <ListItemIcon>
+            <PeopleIcon />
+          </ListItemIcon>
+          <ListItemText primary="Music" />
         </ListItemButton>
 
         <ListItemButton onClick={() => handleMenuItemClick(<Dashboard />)}>
