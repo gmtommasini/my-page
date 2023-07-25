@@ -39,14 +39,15 @@ export const UpdateDate: React.FC<Props> = (props) => {
   return <p style={styles}>Updated on {pdate}</p>;
 };
 
-
-export function generateRandomDate(minDate : Date = new Date(0,0,0)) : Date {
-  function getRandomInt(min: number, max: number): number {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-  const today = new Date()
-  let year = getRandomInt(minDate.getFullYear(), today.getFullYear())
-  let month = getRandomInt(minDate.getMonth(), today.getMonth())
-  let day = getRandomInt(minDate.getDay(), today.getDay())
-  return new Date(year, month, day) 
+export function getRandomDate(startDate: Date = new Date(0,0,0)) {
+  // Convert the given date strings to Date objects
+  const end = new Date();
+  // Calculate the time range in milliseconds
+  const timeRange = end.getTime() - startDate.getTime();
+  // Get a random time offset within the time range
+  const randomTimeOffset = Math.random() * timeRange;
+  // Calculate the random date by adding the offset to the start date
+  const randomDate = new Date(startDate.getTime() + randomTimeOffset);
+  // Return the random date
+  return randomDate;
 }
