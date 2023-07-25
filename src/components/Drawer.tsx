@@ -18,17 +18,11 @@ import QrCode2Icon from '@mui/icons-material/QrCode2';
 import InfoIcon from '@mui/icons-material/Info';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
-
-// PAGES
-
-// import Landing from 'pages/Landing';
-import Hello from 'pages/Hello';
-import Dashboard from 'pages/Dashboard';
-import Card from 'pages/Card';
-import QRCode from 'pages/QRCode';
-
+import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import { styled } from '@mui/material/styles';
-import MusicPage from 'pages/Music';
+
+
+import { Link } from 'react-router-dom';
 // import { mainListItems, secondaryListItems } from 'components/SideBar';
 
 interface DrawerProps {
@@ -65,9 +59,9 @@ const Drawer = styled(MuiDrawer, {
 );
 export default function SideDrawer(props: DrawerProps) {
 
-  const handleMenuItemClick = (component: any) => {
-    props.setcurrentcomponent(component);
-  }
+  // const handleMenuItemClick = (component: any) => {
+  //   props.setcurrentcomponent(component);
+  // }
 
   return (
     <Drawer variant="permanent" open={props.open} width={props.width} setcurrentcomponent={() => { }}  >
@@ -79,41 +73,41 @@ export default function SideDrawer(props: DrawerProps) {
           px: [1],
         }}
       >
-        {/* <List component="nav"> */}
-        <ListItemButton onClick={() => handleMenuItemClick(<Hello />)}>
+        <ListItemButton component={Link} to='/'>
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
           <ListItemText primary="Home" />
         </ListItemButton>
-        {/* </List> */}
+
         <IconButton onClick={props.toggleDrawer}>
           <ChevronLeftIcon />
         </IconButton>
       </Toolbar>
-      <Divider />
-      <List component="nav">
 
+      <Divider />
+
+      <List component="nav">
 
         <ListSubheader component="div" inset>
           Little Projects
         </ListSubheader>
 
-        <ListItemButton onClick={() => handleMenuItemClick(<QRCode />)}>
+        <ListItemButton component={Link} to='/qrcode'>
           <ListItemIcon>
             <QrCode2Icon />
           </ListItemIcon>
           <ListItemText primary="QRCode Gen." />
         </ListItemButton>
 
-        <ListItemButton onClick={() => handleMenuItemClick(<MusicPage />)}>
+        <ListItemButton component={Link} to='/music'>
           <ListItemIcon>
-            <PeopleIcon />
+            <QueueMusicIcon />
           </ListItemIcon>
           <ListItemText primary="Music" />
         </ListItemButton>
 
-        <ListItemButton onClick={() => handleMenuItemClick(<Dashboard />)}>
+        <ListItemButton component={Link} to='/placeholder'>
           <ListItemIcon>
             <PeopleIcon />
           </ListItemIcon>
@@ -126,7 +120,7 @@ export default function SideDrawer(props: DrawerProps) {
           About me
         </ListSubheader>
 
-        <ListItemButton onClick={() => handleMenuItemClick(<Card/>)}>
+        <ListItemButton component={Link} to='/card'>
           <ListItemIcon>
             <InfoIcon />
           </ListItemIcon>
