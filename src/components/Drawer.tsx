@@ -21,14 +21,12 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import { styled } from '@mui/material/styles';
 
-
 import { Link } from 'react-router-dom';
-// import { mainListItems, secondaryListItems } from 'components/SideBar';
+
 
 interface DrawerProps {
   open?: boolean;
   width?: number;
-  setcurrentcomponent: (component: any) => void;
   toggleDrawer?: () => void;
 }
 const Drawer = styled(MuiDrawer, {
@@ -59,12 +57,8 @@ const Drawer = styled(MuiDrawer, {
 );
 export default function SideDrawer(props: DrawerProps) {
 
-  // const handleMenuItemClick = (component: any) => {
-  //   props.setcurrentcomponent(component);
-  // }
-
   return (
-    <Drawer variant="permanent" open={props.open} width={props.width} setcurrentcomponent={() => { }}  >
+    <Drawer variant="permanent" open={props.open} width={props.width} >
       <Toolbar
         sx={{
           display: 'flex',

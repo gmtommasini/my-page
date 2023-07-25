@@ -11,7 +11,7 @@ import SideDrawer from 'components/Drawer';
 import Landing from './Landing';
 import Hello from 'pages/Hello';
 import QRCode from 'pages/QRCode';
-import MusicPage from 'pages/Music';
+import MusicPage from 'pages/Music/Music';
 import Dashboard from 'pages/Dashboard';
 import Card from 'pages/Card';
 
@@ -30,7 +30,7 @@ export default function Home() {
         <Box sx={{ display: 'flex' }}>
             <Router>
                 <TopBar open={open} toggleDrawer={toggleDrawer} />
-                <SideDrawer open={open} width={drawerWidth} toggleDrawer={toggleDrawer} setcurrentcomponent={() => { }} />
+                <SideDrawer open={open} width={drawerWidth} toggleDrawer={toggleDrawer} />
                 <div id="display_area">
                     <Routes>
                         <Route path="/" element={<Landing />} />
