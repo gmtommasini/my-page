@@ -3,53 +3,54 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { getRandomDate } from "utils/Dates";
+import Cookies from 'js-cookie';
 import Loader from "components/Loader";
 import { CreateTrackListRequest, SaveSongListRequest } from "./Types";
-
-// import { handleSpotifyOAuth } from "./functions";
-
 
 
 const MusicPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-
+  
   // Technical states
   const [isLoading, setIsLoading] = useState(false);
+  const [token, setToken] = useState('');
 
   // AUTH
   const [callbackCode, setCallbackCode] = useState<string | null>(null)
   const [sptyState, setSptyState] = useState<string | null>(null)
-  const [token, setToken] = useState(null);
 
   // Business
+  const initialTrackList = localStorage.getItem("songsList")?.split(',') || null
   const [selectedDate, setSelectedDate] = useState(getRandomDate(new Date(1958, 7, 4)).toISOString().split('T')[0]);
   const [billboardData, setBillboardData] = useState(null);
-  const [postData, setPostData] = useState(null);
-  const [saveData, setSaveData] = useState(null);
+  const [tracksList, setTracksList] = useState(initialTrackList);
+  const [playlistID, setPlaylistID] = useState(null);
 
+  // Stores the callback code and state
   useEffect(() => {
-    // Stores the callback and state
     const queryParams = new URLSearchParams(location.search);
     const code = queryParams.get('code');
     const state = queryParams.get('state');
     if (code) {
-      localStorage.removeItem('code') //MODIFY THIS TO COOKIE
-      localStorage.removeItem('state') //MODIFY THIS TO COOKIE
+      // Cookies.set('state', state);
       setCallbackCode(code)
+      if (state) {
+        setSptyState(state)
+      }
     }
-    if (state) {
-      setSptyState(state)
+    else {      
+      console.log("tracksList", tracksList)
+      if (tracksList && Cookies.get('token')) {
+        // it means that user already selected songs and gave auth.
+        savePlaylist()
+      }
     }
   }, [location.search]);
-
   useEffect(() => {
-    if (callbackCode && !token) {
-      localStorage.clear()
-      if (!token) {
-        
-        handleSpotifyToken(callbackCode, sptyState) // this thing will store the state and token
-      }
+    if (callbackCode) {
+      handleSpotifyToken(callbackCode, sptyState) // this thing will store the state and token
+      setCallbackCode(null)
     }
   }, [callbackCode]);
 
@@ -61,60 +62,45 @@ const MusicPage = () => {
 
   async function handleSpotifyOAuth() {
     setIsLoading(true)
-    console.log("HAndling OAUTH")
-
-    // console.log(JSON.stringify(query))
-    // console.log(QueryString.stringify(query))
     let oauth_url = config.MUSIC_BASE_URL + "/get_spotify_auth_url"
-    const response = await fetch(oauth_url)
-    const data = await response.json();
-    console.log("URL: ", data.authorizationUrl)
-    window.location.href = data.authorizationUrl;
-    // window.open(data.authorizationUrl, "_blank");
-
-    // fetch(oauth_url, {
-    //   method: 'POST',
-    // })
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     // Handle the response from the backend, which could include the authorization URL
-    //     // Redirect the user to the Spotify authorization page
-    //     console.log("URL: ", data.authorizationUrl)
-    //     window.location.href = data.authorizationUrl;
-
-    //     // window.open(data.authorizationUrl, "_blank");
-    //   })
-    //   .catch((error) => {
-    //     // Handle any errors that occurred during the process
-    //     console.error('Error initiating OAuth:', error);
-    //   });
-
-
+    fetch(oauth_url, {
+      method: 'POST',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // Handle the response from the backend, which could include the authorization URL
+        // Redirect the user to the Spotify authorization page
+        window.location.href = data.authorizationUrl;
+        // From here, the page should be reloaded with the code in the parameters
+        // useEffect with "location.search" as dependency
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the process
+        console.error('Error initiating OAuth:', error);
+      });
     setIsLoading(false)
   }
   async function handleSpotifyToken(code: string, state: string | null) {
-    console.log("Handling Token - Getting token: ", code, state)
-    if (!token) {
-      let token_url = config.MUSIC_BASE_URL
-        + "/get_spotify_user_token?callback_code="
-        + code + (state ? '&state=' + state : '')
-      fetch(token_url, { method: 'get' })
-        .then((response) => response.json())
-        .then((data) => {
-          localStorage.setItem("token", data.userToken) ///MODIFY THIS TO COOKIE          
-          localStorage.setItem('sptyState', sptyState!)
-          setToken(data.userToken)
-          console.log("Cleaning url :)")
-          navigate('/music') // cleaning query parameters
-        })
-        .catch((error) => {
-          // Handle any errors that occurred during the process
-          console.error('Error with TOKEN:', error);
-        });
-    }
-
+    console.log(`Handling Token - Getting token. code: ${code}\n state: ${state}`)
+    // backend needs callback code and the state to generate token with Spotify
+    let token_url = config.MUSIC_BASE_URL
+      + "/get_spotify_user_token?callback_code="
+      + code + (state ? '&state=' + state : '')
+    fetch(token_url, { method: 'get' })
+      .then((response) => response.json())
+      .then((data) => {
+        // Cookies.setCookie("token", data.userToken, 0.01)
+        // Cookies.setCookie("sptyState", sptyState || "", 0.02)
+        Cookies.set('token', data.userToken, {expires: 0.01})
+        setToken(data.userToken)
+        console.log("Cleaning url :)")
+        navigate('/music') // cleaning query parameters
+      })
+      .catch((error) => {
+        // Handle any errors that occurred during the process
+        console.error('Error with TOKEN:', error);
+      });
   }
-
 
   const handleDateChange = (event: any) => {
     setSelectedDate(event.target.value);
@@ -127,21 +113,11 @@ const MusicPage = () => {
       const response = await fetch(`${base_url}?date=${selectedDate}`);
       const data = await response.json();
       setBillboardData(data);
-      setPostData(null)
-      setSaveData(null)
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setIsLoading(false)
-    }
-  };
+      // setTracksList(null)
+      setPlaylistID(null)
 
-  const createList = async () => {
-    try {
-      // Step 2: POST the fetched data back to the "music" endpoint
-      setIsLoading(true)
       let request_body: CreateTrackListRequest = {
-        list_of_songs: billboardData!
+        list_of_songs: data,
       }
       const postResponse = await fetch(base_url, {
         method: "POST",
@@ -150,8 +126,9 @@ const MusicPage = () => {
         },
         body: JSON.stringify(request_body)
       });
-      const postData = await postResponse.json();
-      setPostData(postData);
+      const songsList = await postResponse.json();
+      setTracksList(songsList);
+      
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -161,10 +138,18 @@ const MusicPage = () => {
 
   const savePlaylist = async () => {
     try {
-      // Step 3: Call the "/save" endpoint with the response of the second request
       setIsLoading(true)
+      let bearer_token = Cookies.get('token')
+      console.log("TOKEN: ", bearer_token)
+      if (!bearer_token) {
+        console.log("TOKEN IS NULL")
+        localStorage.setItem('songsList', tracksList!.join(','))        
+        handleSpotifyOAuth()
+      }
+      const songsListList : any = tracksList ? tracksList : localStorage.getItem('songsList')
+      // const songsListList : any = tracksList ? tracksList : Storage.getFromStorage('songsList', 'object');
       let request_body: SaveSongListRequest = {
-        uri_list: postData!,
+        uri_list: songsListList,
         date: selectedDate,
         // list_name : TBD
       }
@@ -173,16 +158,18 @@ const MusicPage = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + Cookies.get('token')
         },
         body: JSON.stringify(request_body),
       });
       const saveData = await saveResponse.json();
-      console.log(saveData)
-      setSaveData(saveData);
+      console.log("saveData", saveData)
+      setPlaylistID(saveData);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
       setIsLoading(false)
+      localStorage.clear()
     }
   };
 
@@ -202,30 +189,30 @@ const MusicPage = () => {
         value={selectedDate}
         onChange={handleDateChange}
       />
-      <button onClick={fetchBillboardData}>Fetch Billboard</button>
-      {billboardData && !postData && <button onClick={createList}>Create Playlist</button>}
-      {postData && !saveData && <button onClick={savePlaylist}>Save Playlist</button>}
-      <p>We started with a ramdom date for your amusement.</p>
+      <button onClick={fetchBillboardData}>Create Billboard List</button>
+      {/* {billboardData && !tracksList && <button onClick={createList}>Create Playlist</button>} */}
+      {tracksList && !playlistID && <button onClick={savePlaylist}>Save Playlist</button>}
+      <p>We started with a random date for your amusement.</p>
       <p>The earliest date available is 1958/08/04</p>
       {/* Display fetched data (optional) */}
-      {billboardData && !postData && (
+      {billboardData && !tracksList && (
         <div>
           <h2>Fetched Music Data:</h2>
           <p>Result of the soup, the crawling on the Billboard</p>
           <pre>{JSON.stringify(billboardData, null, 2)}</pre>
         </div>
       )}
-      {postData && !saveData && (
+      {tracksList && !playlistID && (
         <div>
           <h2>Spotify's songs URIs:</h2>
           <p>This is something that is not user friendly!</p>
-          <pre>{JSON.stringify(postData, null, 2)}</pre>
+          <pre>{JSON.stringify(tracksList, null, 2)}</pre>
         </div>
       )}
-      {saveData && (
+      {playlistID && (
         <div>
           <h2>Saved Data:</h2>
-          <pre>{JSON.stringify(saveData, null, 2)}</pre>
+          <pre>{JSON.stringify(playlistID, null, 2)}</pre>
         </div>
       )}
     </div>
